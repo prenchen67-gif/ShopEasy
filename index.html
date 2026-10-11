@@ -1,65 +1,388 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShopEasy - Modern Online Store</title>
+    <title>ShopEasy - Professional E-Commerce Store</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f4f6f8; color: #333; }
-        header { background-color: #232f3e; color: white; padding: 15px 20px; text-align: center; }
-        .container { max-width: 1100px; margin: 30px auto; padding: 0 15px; }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .product-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; padding: 20px; transition: transform 0.2s; }
-        .product-card:hover { transform: translateY(-5px); }
-        .product-image { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; }
-        .product-title { font-size: 1.2rem; margin-bottom: 8px; color: #111; }
-        .product-price { color: #b12704; font-size: 1.3rem; font-weight: bold; margin-bottom: 15px; }
-        .buy-btn { background-color: #ffd814; border: 1px solid #fcd200; border-radius: 20px; padding: 10px 25px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.2s; }
-        .buy-btn:hover { background-color: #f7ca00; }
-        footer { text-align: center; padding: 20px; background-color: #131921; color: white; margin-top: 50px; }
+        :root {
+            --primary-color: #ff6b6b;
+            --secondary-color: #2e86de;
+            --dark-color: #222f3e;
+            --light-color: #f4f6f9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-color);
+            color: #333;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--dark-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo span {
+            color: var(--primary-color);
+        }
+
+        .search-box {
+            display: flex;
+            flex: 0 1 400px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .cart-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 22px;
+            color: var(--dark-color);
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
+
+        /* Banner Section */
+        .hero-banner {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=1200') center/cover;
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            margin-bottom: 30px;
+        }
+
+        .hero-banner h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .hero-banner p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        /* Main Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+            border-bottom: 3px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        /* Product Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-category {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .product-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+
+        .product-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-top: auto;
+            margin-bottom: 15px;
+        }
+
+        .add-to-cart-btn {
+            background-color: var(--dark-color);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: var(--primary-color);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 40px 20px 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .footer-section p, .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            font-size: 14px;
+            color: #888;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            .search-box {
+                order: 3;
+                flex: 1 1 100%;
+            }
+            .hero-banner h1 {
+                font-size: 26px;
+            }
+        }
     </style>
 </head>
 <body>
 
+    <!-- Navigation Header -->
     <header>
-        <h1>🛍️ ShopEasy Store</h1>
-        <p>Your Favorite Shopping Destination</p>
+        <div class="navbar">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-bag-shopping"></i> Shop<span>Easy</span>
+            </a>
+            
+            <div class="search-box">
+                <input type="text" placeholder="সন্ধান করুন (Search products)...">
+            </div>
+
+            <button class="cart-btn" onclick="alert('আপনার কার্ট দেখতে প্রোডাক্ট যোগ করুন!')">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="cart-count" id="cart-count">0</span>
+            </button>
+        </div>
     </header>
 
+    <!-- Hero Banner -->
+    <div class="hero-banner">
+        <h1>সেরা মানের প্রোডাক্ট, সেরা দামে!</h1>
+        <p>আপনার পছন্দের ইলেকট্রনিক্স এবং ফ্যাশন আইটেম কিনুন সরাসরি অনলাইন থেকে</p>
+    </div>
+
+    <!-- Main Content -->
     <div class="container">
-        <h2 style="margin-bottom: 20px;">Featured Products</h2>
-        
+        <h2 class="section-title">পপুলার প্রোডাক্টস</h2>
+
         <div class="products-grid">
+            
             <!-- Product 1 -->
             <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500" alt="Headphones" class="product-image">
-                <h3 class="product-title">Wireless Headphones</h3>
-                <div class="product-price">$49.99</div>
-                <button class="buy-btn">Buy Now</button>
+                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500" class="product-img" alt="Headphones">
+                <div class="product-info">
+                    <span class="product-category">Electronics</span>
+                    <h3 class="product-title">Wireless Bluetooth Headphones</h3>
+                    <div class="product-price">৳ ২,৫০০</div>
+                    <button class="add-to-cart-btn" onclick="addToCart()">
+                        <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                    </button>
+                </div>
             </div>
 
             <!-- Product 2 -->
             <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500" alt="Smart Watch" class="product-image">
-                <h3 class="product-title">Smart Fitness Watch</h3>
-                <div class="product-price">$89.99</div>
-                <button class="buy-btn">Buy Now</button>
+                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500" class="product-img" alt="Watch">
+                <div class="product-info">
+                    <span class="product-category">Gadgets</span>
+                    <h3 class="product-title">Smart Fitness Watch Pro</h3>
+                    <div class="product-price">৳ ৪,২০০</div>
+                    <button class="add-to-cart-btn" onclick="addToCart()">
+                        <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                    </button>
+                </div>
             </div>
 
             <!-- Product 3 -->
             <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" alt="Sports Shoes" class="product-image">
-                <h3 class="product-title">Running Sports Shoes</h3>
-                <div class="product-price">$65.00</div>
-                <button class="buy-btn">Buy Now</button>
+                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" class="product-img" alt="Shoes">
+                <div class="product-info">
+                    <span class="product-category">Fashion</span>
+                    <h3 class="product-title">Nike Sports Running Shoes</h3>
+                    <div class="product-price">৳ ৩,৮০০</div>
+                    <button class="add-to-cart-btn" onclick="addToCart()">
+                        <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                    </button>
+                </div>
             </div>
+
+            <!-- Product 4 -->
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500" class="product-img" alt="Puma Shoes">
+                <div class="product-info">
+                    <span class="product-category">Fashion</span>
+                    <h3 class="product-title">Puma Casual Sneakers</h3>
+                    <div class="product-price">৳ ৩,২০০</div>
+                    <button class="add-to-cart-btn" onclick="addToCart()">
+                        <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+
         </div>
     </div>
 
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2026 ShopEasy. All rights reserved.</p>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>ShopEasy</h3>
+                <p>আমরা প্রদান করি নির্ভরযোগ্য এবং প্রিমিয়াম কোয়ালিটির অনলাইন শপিং অভিজ্ঞতা।</p>
+            </div>
+            <div class="footer-section">
+                <h3>কুইক লিংক</h3>
+                <p><a href="#">হোম</a></p>
+                <p><a href="#">প্রোডাক্টস</a></p>
+                <p><a href="#">আমাদের সম্পর্কে</a></p>
+            </div>
+            <div class="footer-section">
+                <h3>যোগাযোগ</h3>
+                <p>ইমেইল: support@shopeasy.com</p>
+                <p>ফোন: +৮৮০ ১৭০০-০০০০০</p>
+                <p>ঢাকা, বাংলাদেশ</p>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2026 ShopEasy. All rights reserved.
+        </div>
     </footer>
 
+    <!-- Interactive Script -->
+    <script>
+        let count = 0;
+        function addToCart() {
+            count++;
+            document.getElementById('cart-count').innerText = count;
+            alert('প্রোডাক্টটি সফলভাবে কার্টে যোগ করা হয়েছে!');
+        }
+    </script>
 </body>
 </html>
