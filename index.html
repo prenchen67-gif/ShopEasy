@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEasy - Professional Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo"><i class="fa-solid fa-bag-shopping"></i> Shop<span>Easy</span></a>
+    </header>
+
+    <div class="hero">
+        <h1>আমাদের চমৎকার কালেকশন</h1>
+        <p>ডিটেইলস ও অর্ডার করতে প্রডাক্টের ওপর টাচ করুন</p>
+    </div>
+
+    <div class="container">
+        <!-- Category Filter Buttons Bar -->
+        <div class="category-bar" id="categoryBar">
+            <button class="cat-btn active" onclick="filterProducts('all', this)">সকল প্রডাক্ট</button>
+            <button class="cat-btn" onclick="filterProducts('electronics', this)">ইলেকট্রনিক্স</button>
+            <button class="cat-btn" onclick="filterProducts('fashion', this)">ফ্যাশন</button>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid" id="productsGrid"></div>
+    </div>
+
+    <!-- Interface 1: Product View Modal -->
+    <div class="modal" id="productViewModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('productViewModal')">&times;</span>
+            <img id="viewImage" src="" class="view-img">
+            <h2 id="viewTitle" class="view-title"></h2>
+            <div id="viewPrice" class="view-price"></div>
+            
+            <div class="view-desc" id="viewDesc"></div>
+
+            <div class="option-group">
+                <label>কালার / ভ্যারাইটি সিলেক্ট করুন:</label>
+                <select id="viewVariety"></select>
+            </div>
+
+            <div class="qty-box">
+                <label style="font-weight: 600;">পরিমাণ (Qty):</label>
+                <button class="qty-btn" onclick="updateQty(-1)">-</button>
+                <span class="qty-val" id="qtyVal">1</span>
+                <button class="qty-btn" onclick="updateQty(1)">+</button>
+            </div>
+
+            <button class="action-btn" onclick="proceedToCheckout()"><i class="fa-solid fa-cart-shopping"></i> অর্ডার করতে এগিয়ে যান</button>
+        </div>
+    </div>
+
+    <!-- Interface 2: Order Checkout Form Modal -->
+    <div class="modal" id="checkoutModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('checkoutModal')">&times;</span>
+            <h3 style="margin-bottom: 12px; color: #222f3e;">অর্ডার ফর্ম</h3>
+            
+            <div class="notice-box">
+                <strong>⚠️ ডেলিভারি চার্জ নিয়ম:</strong><br>
+                অর্ডার নিশ্চিত করতে ডেলিভারি চার্জ <strong>১৫০৳</strong> আগে সেন্ড মানি করতে হবে。<br>
+                📱 <strong>বিকাশ/নগদ (Personal):</strong> 01607576586
+            </div>
+
+            <form id="orderForm">
+                <div class="form-group">
+                    <label>প্রোডাক্ট ও ভ্যারাইটি:</label>
+                    <input type="text" id="finalProduct" readonly style="background: #eee;">
+                </div>
+                <div class="form-group">
+                    <label>মোট মূল্য (Total Price):</label>
+                    <input type="text" id="finalPrice" readonly style="background: #eee; font-weight: bold; color: #d63031;">
+                </div>
+                <div class="form-group">
+                    <label>আপনার নাম:</label>
+                    <input type="text" id="custName" required placeholder="আপনার পুরো নাম লিখুন">
+                </div>
+                <div class="form-group">
+                    <label>মোবাইল নম্বর:</label>
+                    <input type="tel" id="custPhone" required placeholder="০১৭xxxxxxxx">
+                </div>
+                <div class="form-group">
+                    <label>ডেলিভারি ঠিকানা:</label>
+                    <textarea id="custAddress" rows="2" required placeholder="বাসা নম্বর, রোড, এলাকা, জেলা"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>পেমেন্ট মাধ্যম:</label>
+                    <select id="payMethod">
+                        <option value="bKash">বিকাশ (bKash)</option>
+                        <option value="Nagad">নগদ (Nagad)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>ট্রানজেকশন আইডি (TrxID):</label>
+                    <input type="text" id="custTxn" required placeholder="যেমন: 9J87X6K5">
+                </div>
+                <button type="submit" class="submit-btn" id="submitBtn">অর্ডার নিশ্চিত করুন</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 ShopEasy Store. All rights reserved.
+    </footer>
+
+    <script src="products.js"></script>
+    <script src="script.js"></script>
+</body>
+  </html>
+  
