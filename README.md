@@ -37,4 +37,4 @@ ShopEasy/
 
 ## 👤 Author
 
-Developed with ❤️ by **PRENCHEN_MRO**
+Developed with by **PRENCHEN_MRO**
