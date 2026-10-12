@@ -28,10 +28,10 @@ Welcome to **ShopEasy**, a fast, lightweight, and modern e-commerce web applicat
 ShopEasy/
 │
 ├── index.html       # Main HTML file for site structure
-├── style.css        # Custom CSS styling
+├── style.css       # Custom CSS styling
 ├── script.js       # Core application logic
 ├── products.js     # Product dataset
-└── README.md        # Project documentation
+└── README.md       # Project documentation
 
 ---
 
