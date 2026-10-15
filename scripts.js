@@ -1,5 +1,5 @@
 // আপনার Google Apps Script URL
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/library/d/1H3SP6pEz6QbyTPPerFU04PS-kkSmDVYB2h5KaGTzadSg7IGRYMmkNNA2/4";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby5rC0SBZzfqoAD93CZRZJ0jXleEPzmzU2BnkDPj_stDukdPmpohuMeK6J-yYCBJ3qx/exec";
 
 let products = [];
 let currentProduct = {};
