@@ -1,19 +1,66 @@
+// আপনার Google Apps Script URL
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx-6TwODt-zq7--9tpW3eaAkqwB7I3PlRkyIGr2QkIe0Bno6-aCl_YVSIg45eGvL0Dl/exec";
 
+let products = [];
 let currentProduct = {};
 let currentQty = 1;
 
-// Load all products on page load
+// পেজ লোড হওয়ার পর গুগল শিট থেকে প্রোডাক্ট নিয়ে আসবে
 window.addEventListener('DOMContentLoaded', () => {
-    displayProducts(products);
+    fetchProducts();
 });
 
-// Render products function
+// গুগল শিট থেকে প্রোডাক্ট ফেচিং
+async function fetchProducts() {
+    const grid = document.getElementById('productsGrid');
+    grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #555;">প্রোডাক্ট লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...</p>';
+
+    try {
+        const response = await fetch(GOOGLE_SCRIPT_URL);
+        const data = await response.json();
+        
+        if (data && data.length > 0) {
+            products = data;
+            displayProducts(products);
+        } else {
+            // যদি গুগল শিট ফাঁকা থাকে বা ফেচ না হয় তবে ডিফল্ট প্রোডাক্ট দেখাবে
+            loadDefaultProducts();
+        }
+    } catch (error) {
+        console.warn("গুগল শিট থেকে ডাটা আসতে সমস্যা হয়েছে, ডিফল্ট ডাটা দেখানো হচ্ছে।", error);
+        loadDefaultProducts();
+    }
+}
+
+// ব্যাকআপ / ডিফল্ট প্রোডাক্ট
+function loadDefaultProducts() {
+    products = [
+        {
+            title: "Wireless Bluetooth Headphones",
+            price: 2500,
+            image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500",
+            desc: "• ১০ ঘণ্টা প্লে-টাইম ব্যাটারি ব্যাকআপ\n• সুপার বাস এবং ক্লিয়ার সাউন্ড কোয়ালিটি",
+            varieties: ["Black", "White", "Blue"],
+            category: "electronics"
+        },
+        {
+            title: "Smart Fitness Watch Pro",
+            price: 4200,
+            image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500",
+            desc: "• হার্ট রেট ও স্লিপ মনিটরিং ডিসপ্লে\n• ফুল ওয়াটারপ্রুফ মেটাল বডি",
+            varieties: ["Black", "Silver"],
+            category: "electronics"
+        }
+    ];
+    displayProducts(products);
+}
+
+// প্রোডাক্ট গ্রিড রেন্ডার
 function displayProducts(prods) {
     const grid = document.getElementById('productsGrid');
     grid.innerHTML = '';
 
-    if (prods.length === 0) {
+    if (!prods || prods.length === 0) {
         grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #777;">এই ক্যাটেগরিতে কোনো প্রডাক্ট নেই।</p>';
         return;
     }
@@ -23,7 +70,7 @@ function displayProducts(prods) {
         card.className = 'product-card';
         card.onclick = () => openProductDetails(p);
         card.innerHTML = `
-            <img src="${p.image}" class="product-img">
+            <img src="${p.image || 'https://via.placeholder.com/200'}" class="product-img">
             <h3 class="product-title">${p.title}</h3>
             <div class="product-price">৳ ${p.price}</div>
         `;
@@ -31,36 +78,39 @@ function displayProducts(prods) {
     });
 }
 
-// Filter products by category
+// ক্যাটাগরি ফিল্টার
 function filterProducts(category, btn) {
-    // Active class toggle
     document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
 
     if (category === 'all') {
         displayProducts(products);
     } else {
-        const filtered = products.filter(p => p.category === category);
+        const filtered = products.filter(p => p.category && p.category.toLowerCase() === category.toLowerCase());
         displayProducts(filtered);
     }
 }
 
+// প্রোডাক্ট ডিটেইলস মোডাল
 function openProductDetails(p) {
     currentProduct = p;
     currentQty = 1;
 
     document.getElementById('viewTitle').innerText = p.title;
     document.getElementById('viewPrice').innerText = '৳ ' + p.price;
-    document.getElementById('viewImage').src = p.image;
-    document.getElementById('viewDesc').innerText = p.desc;
+    document.getElementById('viewImage').src = p.image || 'https://via.placeholder.com/200';
+    document.getElementById('viewDesc').innerText = p.desc || '';
     document.getElementById('qtyVal').innerText = currentQty;
 
     const varietySelect = document.getElementById('viewVariety');
     varietySelect.innerHTML = '';
-    p.varieties.forEach(v => {
+    
+    // ভ্যারাইটি অ্যারে বা স্ট্রিং চেক
+    let vars = Array.isArray(p.varieties) ? p.varieties : (p.varieties ? p.varieties.split(',') : ['Default']);
+    vars.forEach(v => {
         let opt = document.createElement('option');
-        opt.value = v;
-        opt.innerText = v;
+        opt.value = v.trim();
+        opt.innerText = v.trim();
         varietySelect.appendChild(opt);
     });
 
@@ -91,6 +141,7 @@ function proceedToCheckout() {
     document.getElementById('checkoutModal').style.display = 'flex';
 }
 
+// অর্ডার সাবমিট ফর্ম
 document.getElementById('orderForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
