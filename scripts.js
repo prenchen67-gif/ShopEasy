@@ -3,7 +3,7 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx8H7N4KI-oWk
 let allProducts = [];
 let selectedProduct = null;
 let currentQty = 1;
-const ADMIN_PASSWORD = "579781"; // আপনার পছন্দমতো পাসওয়ার্ড দিতে পারেন
+const ADMIN_PASSWORD = "579781"; 
 
 document.addEventListener("DOMContentLoaded", () => {
   fetchProducts();
@@ -147,9 +147,64 @@ function checkAdminPass() {
     closeModal('adminAuthModal');
     document.getElementById("adminPass").value = "";
     openModal('adminPanelModal');
+    fetchOrders();
   } else {
     alert("ভুল পাসওয়ার্ড! আবার চেষ্টা করুন।");
   }
+}
+
+function switchAdminTab(tabId, btnElement) {
+  const tabs = document.querySelectorAll('.tab-content');
+  tabs.forEach(tab => tab.classList.remove('active'));
+
+  const tabBtns = document.querySelectorAll('.admin-tab-btn');
+  tabBtns.forEach(btn => btn.classList.remove('active'));
+
+  document.getElementById(tabId).classList.add('active');
+  if(btnElement) btnElement.classList.add('active');
+
+  if(tabId === 'ordersTab') {
+    fetchOrders();
+  }
+}
+
+function fetchOrders() {
+  const container = document.getElementById("ordersContainer");
+  container.innerHTML = "<p style='text-align:center; padding:15px;'>অর্ডার লোড হচ্ছে...</p>";
+
+  fetch(GOOGLE_SCRIPT_URL + "?action=getOrders")
+    .then(res => res.json())
+    .then(orders => {
+      if(!orders || orders.length === 0) {
+        container.innerHTML = "<p style='text-align:center; padding:15px;'>কোনো অর্ডার পাওয়া যায়নি!</p>";
+        return;
+      }
+
+      let html = `<div class="orders-list">`;
+      orders.reverse().forEach(o => {
+        html += `
+          <div class="order-card">
+            <div class="order-header">
+              <strong>📦 ${o.product || 'N/A'}</strong>
+              <span class="order-price">${o.price || '0৳'}</span>
+            </div>
+            <div class="order-body">
+              <p>👤 <strong>নাম:</strong> ${o.name || 'N/A'}</p>
+              <p>📱 <strong>ফোন:</strong> <a href="tel:${o.phone}">${o.phone || 'N/A'}</a></p>
+              <p>🏠 <strong>ঠিকানা:</strong> ${o.address || 'N/A'}</p>
+              <p>💳 <strong>মেথড:</strong> ${o.method || 'N/A'} (TrxID: <b>${o.txnid || 'N/A'}</b>)</p>
+              <p style="font-size:11px; color:#888;">📅 তারিখ: ${o.date ? new Date(o.date).toLocaleString('bn-BD') : 'N/A'}</p>
+            </div>
+          </div>
+        `;
+      });
+      html += `</div>`;
+      container.innerHTML = html;
+    })
+    .catch(err => {
+      console.error(err);
+      container.innerHTML = "<p style='text-align:center; color:red; padding:15px;'>অর্ডার লোড করতে সমস্যা হয়েছে!</p>";
+    });
 }
 
 function handleOrderSubmit(e) {
@@ -220,7 +275,7 @@ function handleAddProductSubmit(e) {
     closeModal('adminPanelModal');
     addBtn.disabled = false;
     addBtn.innerText = "প্রডাক্ট সেভ করুন";
-    fetchProducts(); // পেজ না রিফ্রেশ করেই নতুন প্রডাক্ট লোড করবে
+    fetchProducts();
   })
   .catch(error => {
     console.error("Add Product Error:", error);
@@ -228,4 +283,5 @@ function handleAddProductSubmit(e) {
     addBtn.disabled = false;
     addBtn.innerText = "প্রডাক্ট সেভ করুন";
   });
-}
+    }
+      
