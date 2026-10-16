@@ -64,7 +64,7 @@
             
             <div class="notice-box">
                 <strong>⚠️ ডেলিভারি চার্জ নিয়ম:</strong><br>
-                অর্ডার নিশ্চিত করতে ডেলিভারি চার্জ <strong>১৫০৳</strong> আগে সেন্ড মানি করতে হবে。<br>
+                অর্ডার নিশ্চিত করতে ডেলিভারি চার্জ <strong>১৫০৳</strong> আগে সেন্ড মানি করতে হবে।<br>
                 📱 <strong>বিকাশ/নগদ (Personal):</strong> 01607576586
             </div>
 
@@ -105,14 +105,63 @@
         </div>
     </div>
 
-    
-       <footer>
-        &copy; 2026 ShopEasy Store. All rights reserved.
+    <!-- Interface 3: Admin Auth Modal -->
+    <div class="modal" id="adminAuthModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('adminAuthModal')">&times;</span>
+            <h3 style="margin-bottom: 15px; color: #222f3e;">অ্যাডমিন লগইন</h3>
+            <div class="form-group">
+                <label>পাসওয়ার্ড দিন:</label>
+                <input type="password" id="adminPass" placeholder="পাসওয়ার্ড লিখুন">
+            </div>
+            <button class="action-btn" onclick="checkAdminPass()">লগইন করুন</button>
+        </div>
+    </div>
+
+    <!-- Interface 4: Admin Add Product Modal Panel -->
+    <div class="modal" id="adminPanelModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('adminPanelModal')">&times;</span>
+            <h3 style="margin-bottom: 15px; color: #222f3e;">নতুন প্রডাক্ট যোগ করুন</h3>
+            <form id="addProductForm">
+                <div class="form-group">
+                    <label>প্রডাক্টের নাম (Title):</label>
+                    <input type="text" id="prodTitle" required placeholder="যেমন: Smart Watch">
+                </div>
+                <div class="form-group">
+                    <label>মূল্য (Price):</label>
+                    <input type="number" id="prodPrice" required placeholder="যেমন: 1200">
+                </div>
+                <div class="form-group">
+                    <label>ছবির লিংক (Direct Image URL):</label>
+                    <input type="url" id="prodImage" required placeholder="https://i.ibb.co/xxxx/image.jpg">
+                </div>
+                <div class="form-group">
+                    <label>বিবরণ (Description):</label>
+                    <textarea id="prodDesc" rows="3" placeholder="প্রডাক্টের বিস্তারিত তথ্য..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>ভ্যারাইটি/কালার (কমা দিয়ে লিখুন):</label>
+                    <input type="text" id="prodVarieties" placeholder="Black, Blue, Red">
+                </div>
+                <div class="form-group">
+                    <label>ক্যাটাগরি:</label>
+                    <select id="prodCategory">
+                        <option value="electronics">ইলেকট্রনিক্স (electronics)</option>
+                        <option value="fashion">ফ্যাশন (fashion)</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn" id="addProdBtn">প্রডাক্ট সেভ করুন</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 ShopEasy Store. All rights reserved.</p>
+        <button class="admin-footer-btn" onclick="openModal('adminAuthModal')"><i class="fa-solid fa-user-lock"></i> অ্যাডমিন প্যানেল</button>
     </footer>
 
-  <script src="script.js" defer></script>
+    <script src="script.js" defer></script>
 </body>
-</html>
-
-
-  
+        </html>
+        
