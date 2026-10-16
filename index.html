@@ -118,41 +118,59 @@
         </div>
     </div>
 
-    <!-- Interface 4: Admin Add Product Modal Panel -->
+    <!-- Interface 4: Admin Panel Modal -->
     <div class="modal" id="adminPanelModal">
-        <div class="modal-content">
+        <div class="modal-content admin-modal-wide">
             <span class="close-btn" onclick="closeModal('adminPanelModal')">&times;</span>
-            <h3 style="margin-bottom: 15px; color: #222f3e;">নতুন প্রডাক্ট যোগ করুন</h3>
-            <form id="addProductForm">
-                <div class="form-group">
-                    <label>প্রডাক্টের নাম (Title):</label>
-                    <input type="text" id="prodTitle" required placeholder="যেমন: Smart Watch">
+            
+            <div class="admin-tabs">
+                <button class="admin-tab-btn active" onclick="switchAdminTab('addProdTab', this)"><i class="fa-solid fa-plus"></i> প্রডাক্ট যোগ করুন</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab('ordersTab', this)"><i class="fa-solid fa-list-check"></i> অর্ডারের তালিকা</button>
+            </div>
+
+            <!-- Tab 1: Add Product Form -->
+            <div id="addProdTab" class="tab-content active">
+                <h3 style="margin-bottom: 15px; color: #222f3e;">নতুন প্রডাক্ট যোগ করুন</h3>
+                <form id="addProductForm">
+                    <div class="form-group">
+                        <label>প্রডাক্টের নাম (Title):</label>
+                        <input type="text" id="prodTitle" required placeholder="যেমন: Smart Watch">
+                    </div>
+                    <div class="form-group">
+                        <label>মূল্য (Price):</label>
+                        <input type="number" id="prodPrice" required placeholder="যেমন: 1200">
+                    </div>
+                    <div class="form-group">
+                        <label>ছবির লিংক (Direct Image URL):</label>
+                        <input type="url" id="prodImage" required placeholder="https://i.ibb.co/xxxx/image.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label>বিবরণ (Description):</label>
+                        <textarea id="prodDesc" rows="3" placeholder="প্রডাক্টের বিস্তারিত তথ্য..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>ভ্যারাইটি/কালার (কমা দিয়ে লিখুন):</label>
+                        <input type="text" id="prodVarieties" placeholder="Black, Blue, Red">
+                    </div>
+                    <div class="form-group">
+                        <label>ক্যাটাগরি:</label>
+                        <select id="prodCategory">
+                            <option value="electronics">ইলেকট্রনিক্স (electronics)</option>
+                            <option value="fashion">ফ্যাশন (fashion)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="submit-btn" id="addProdBtn">প্রডাক্ট সেভ করুন</button>
+                </form>
+            </div>
+
+            <!-- Tab 2: Orders List -->
+            <div id="ordersTab" class="tab-content">
+                <h3 style="margin-bottom: 15px; color: #222f3e;">সকল কাস্টমার অর্ডার</h3>
+                <div id="ordersContainer">
+                    <p style="text-align:center; padding:15px;">অর্ডার লোড হচ্ছে...</p>
                 </div>
-                <div class="form-group">
-                    <label>মূল্য (Price):</label>
-                    <input type="number" id="prodPrice" required placeholder="যেমন: 1200">
-                </div>
-                <div class="form-group">
-                    <label>ছবির লিংক (Direct Image URL):</label>
-                    <input type="url" id="prodImage" required placeholder="https://i.ibb.co/xxxx/image.jpg">
-                </div>
-                <div class="form-group">
-                    <label>বিবরণ (Description):</label>
-                    <textarea id="prodDesc" rows="3" placeholder="প্রডাক্টের বিস্তারিত তথ্য..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>ভ্যারাইটি/কালার (কমা দিয়ে লিখুন):</label>
-                    <input type="text" id="prodVarieties" placeholder="Black, Blue, Red">
-                </div>
-                <div class="form-group">
-                    <label>ক্যাটাগরি:</label>
-                    <select id="prodCategory">
-                        <option value="electronics">ইলেকট্রনিক্স (electronics)</option>
-                        <option value="fashion">ফ্যাশন (fashion)</option>
-                    </select>
-                </div>
-                <button type="submit" class="submit-btn" id="addProdBtn">প্রডাক্ট সেভ করুন</button>
-            </form>
+            </div>
+
         </div>
     </div>
 
@@ -163,5 +181,5 @@
 
     <script src="script.js" defer></script>
 </body>
-        </html>
-        
+    </html>
+                                                                                   
