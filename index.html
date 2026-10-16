@@ -9,7 +9,7 @@
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f4f6f9; color: #333; }
+        body { background-color: #f4f6f9; color: #333; min-height: 100vh; display: flex; flex-direction: column; }
 
         header { background-color: #222f3e; color: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .logo { font-size: 24px; font-weight: bold; color: #fff; text-decoration: none; }
@@ -18,7 +18,7 @@
         .hero { background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=1200') center/cover; color: white; text-align: center; padding: 40px 20px; }
         .hero h1 { font-size: 26px; margin-bottom: 8px; }
 
-        .container { max-width: 1100px; margin: 30px auto; padding: 0 15px; }
+        .container { max-width: 1100px; margin: 30px auto; padding: 0 15px; flex: 1; }
 
         /* Category Bar Styling */
         .category-bar { display: flex; gap: 10px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; }
@@ -33,8 +33,8 @@
         .product-title { font-size: 16px; margin: 12px 0 6px; color: #222f3e; font-weight: 600; }
         .product-price { font-size: 18px; color: #ff6b6b; font-weight: bold; }
 
-        /* Modal Styles */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
+        /* Modal Styles Fix */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 9999; padding: 15px; }
         .modal-content { background: white; padding: 20px; border-radius: 12px; width: 100%; max-width: 450px; position: relative; max-height: 90vh; overflow-y: auto; }
         .close-btn { position: absolute; top: 12px; right: 15px; font-size: 26px; cursor: pointer; color: #777; font-weight: bold; }
 
@@ -61,8 +61,8 @@
         .submit-btn { background: #27ae60; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; }
         .submit-btn:disabled { background: #888; }
 
-        footer { text-align: center; padding: 20px; background: #222f3e; color: white; margin-top: 40px; font-size: 14px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-        .admin-footer-btn { background: transparent; border: 1px solid #576574; color: #c8d6e5; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 12px; transition: 0.3s; }
+        footer { text-align: center; padding: 20px; background: #222f3e; color: white; margin-top: auto; font-size: 14px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .admin-footer-btn { background: transparent; border: 1px solid #576574; color: #c8d6e5; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 13px; transition: 0.3s; }
         .admin-footer-btn:hover { background: #ff6b6b; color: white; border-color: #ff6b6b; }
 
         /* Admin Modal Tabs & Cards */
@@ -251,7 +251,7 @@
 
     <footer>
         <p>&copy; 2026 ShopEasy Store. All rights reserved.</p>
-        <button class="admin-footer-btn" onclick="openModal('adminAuthModal')"><i class="fa-solid fa-user-lock"></i> অ্যাডমিন প্যানেল</button>
+        <button class="admin-footer-btn" onclick="openAdminModal()"><i class="fa-solid fa-user-lock"></i> অ্যাডমিন প্যানেল</button>
     </footer>
 
     <!-- JavaScript Script -->
@@ -385,4 +385,172 @@
           const variety = document.getElementById("viewVariety").value;
           const totalPrice = (selectedProduct.price || 0) * currentQty;
 
-          document.getElementById("finalProduct").value = `${selectedProduct.title} (${variet
+          document.getElementById("finalProduct").value = `${selectedProduct.title} (${variety}) - Qty: ${currentQty}`;
+          document.getElementById("finalPrice").value = `${totalPrice} ৳ (ডেলিভারি চার্জ ১৫০৳ সহ মোট: ${totalPrice + 150}৳)`;
+
+          openModal("checkoutModal");
+        }
+
+        function openModal(modalId) {
+          const m = document.getElementById(modalId);
+          if(m) m.style.display = "flex";
+        }
+
+        function closeModal(modalId) {
+          const m = document.getElementById(modalId);
+          if(m) m.style.display = "none";
+        }
+
+        function openAdminModal() {
+          const m = document.getElementById("adminAuthModal");
+          if(m) m.style.display = "flex";
+        }
+
+        function checkAdminPass() {
+          const pass = document.getElementById("adminPass").value;
+          if (pass === ADMIN_PASSWORD) {
+            closeModal('adminAuthModal');
+            document.getElementById("adminPass").value = "";
+            openModal('adminPanelModal');
+            fetchOrders();
+          } else {
+            alert("ভুল পাসওয়ার্ড! আবার চেষ্টা করুন।");
+          }
+        }
+
+        function switchAdminTab(tabId, btnElement) {
+          const tabs = document.querySelectorAll('.tab-content');
+          tabs.forEach(tab => tab.classList.remove('active'));
+
+          const tabBtns = document.querySelectorAll('.admin-tab-btn');
+          tabBtns.forEach(btn => btn.classList.remove('active'));
+
+          const targetTab = document.getElementById(tabId);
+          if(targetTab) targetTab.classList.add('active');
+          if(btnElement) btnElement.classList.add('active');
+
+          if(tabId === 'ordersTab') {
+            fetchOrders();
+          }
+        }
+
+        function fetchOrders() {
+          const container = document.getElementById("ordersContainer");
+          if(!container) return;
+          container.innerHTML = "<p style='text-align:center; padding:15px;'>অর্ডার লোড হচ্ছে...</p>";
+
+          fetch(GOOGLE_SCRIPT_URL + "?action=getOrders")
+            .then(res => res.json())
+            .then(orders => {
+              if(!orders || orders.length === 0) {
+                container.innerHTML = "<p style='text-align:center; padding:15px;'>কোনো অর্ডার পাওয়া যায়নি!</p>";
+                return;
+              }
+
+              let html = `<div class="orders-list">`;
+              orders.reverse().forEach(o => {
+                html += `
+                  <div class="order-card">
+                    <div class="order-header">
+                      <strong>📦 ${o.product || 'N/A'}</strong>
+                      <span class="order-price">${o.price || '0৳'}</span>
+                    </div>
+                    <div class="order-body">
+                      <p>👤 <strong>নাম:</strong> ${o.name || 'N/A'}</p>
+                      <p>📱 <strong>ফোন:</strong> <a href="tel:${o.phone}">${o.phone || 'N/A'}</a></p>
+                      <p>🏠 <strong>ঠিকানা:</strong> ${o.address || 'N/A'}</p>
+                      <p>💳 <strong>মেথড:</strong> ${o.method || 'N/A'} (TrxID: <b>${o.txnid || 'N/A'}</b>)</p>
+                      <p style="font-size:11px; color:#888;">📅 তারিখ: ${o.date ? new Date(o.date).toLocaleString('bn-BD') : 'N/A'}</p>
+                    </div>
+                  </div>
+                `;
+              });
+              html += `</div>`;
+              container.innerHTML = html;
+            })
+            .catch(err => {
+              console.error(err);
+              container.innerHTML = "<p style='text-align:center; color:red; padding:15px;'>অর্ডার লোড করতে সমস্যা হয়েছে!</p>";
+            });
+        }
+
+        function handleOrderSubmit(e) {
+          e.preventDefault();
+
+          const submitBtn = document.getElementById("submitBtn");
+          submitBtn.disabled = true;
+          submitBtn.innerText = "অর্ডার সাবমিট হচ্ছে...";
+
+          const orderData = {
+            action: "addOrder",
+            product: document.getElementById("finalProduct").value,
+            price: document.getElementById("finalPrice").value,
+            name: document.getElementById("custName").value,
+            phone: document.getElementById("custPhone").value,
+            address: document.getElementById("custAddress").value,
+            method: document.getElementById("payMethod").value,
+            txnid: document.getElementById("custTxn").value
+          };
+
+          fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(orderData)
+          })
+          .then(() => {
+            alert("সফলভাবে আপনার অর্ডারটি গ্রহণ করা হয়েছে! ধন্যবাদ।");
+            document.getElementById("orderForm").reset();
+            closeModal('checkoutModal');
+            submitBtn.disabled = false;
+            submitBtn.innerText = "অর্ডার নিশ্চিত করুন";
+          })
+          .catch(error => {
+            console.error("Order Error:", error);
+            alert("অর্ডার পাঠাতে সমস্যা হয়েছে।");
+            submitBtn.disabled = false;
+            submitBtn.innerText = "অর্ডার নিশ্চিত করুন";
+          });
+        }
+
+        function handleAddProductSubmit(e) {
+          e.preventDefault();
+
+          const addBtn = document.getElementById("addProdBtn");
+          addBtn.disabled = true;
+          addBtn.innerText = "প্রডাক্ট সেভ হচ্ছে...";
+
+          const productData = {
+            action: "addProduct",
+            title: document.getElementById("prodTitle").value,
+            price: document.getElementById("prodPrice").value,
+            image: document.getElementById("prodImage").value,
+            desc: document.getElementById("prodDesc").value,
+            varieties: document.getElementById("prodVarieties").value,
+            category: document.getElementById("prodCategory").value
+          };
+
+          fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(productData)
+          })
+          .then(() => {
+            alert("নতুন প্রডাক্ট সফলভাবে যুক্ত হয়েছে!");
+            document.getElementById("addProductForm").reset();
+            closeModal('adminPanelModal');
+            addBtn.disabled = false;
+            addBtn.innerText = "প্রডাক্ট সেভ করুন";
+            fetchProducts();
+          })
+          .catch(error => {
+            console.error("Add Product Error:", error);
+            alert("প্রডাক্ট যোগ করতে সমস্যা হয়েছে।");
+            addBtn.disabled = false;
+            addBtn.innerText = "প্রডাক্ট সেভ করুন";
+          });
+        }
+    </script>
+</body>
+</html>
